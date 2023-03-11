@@ -51,6 +51,8 @@ echo 7. San system
 echo 8. Delete all bloatware
 echo 9. Disable Windows updates
 echo 10. Enable Windows updates
+echo 11. Force Delete
+echo 12. Download
 echo 0. Exit
 
 set /p choice=Enter choice:
@@ -65,6 +67,8 @@ if "%choice%"=="7" goto option7
 if "%choice%"=="8" goto option8
 if "%choice%"=="9" goto option9
 if "%choice%"=="10" goto option10
+if "%choice%"=="11" goto option11
+if "%choice%"=="12" goto option12
 if "%choice%"=="0" goto end
 cls
 echo Invalid choice. Please try again.
@@ -102,6 +106,11 @@ echo #          https://github.com/Moemen-N7/         #
 echo ##################################################
 echo Thanks For Using My tool  :)
 echo ############################
+start /max https://moemen.ga
+
+
+
+
 pause
 goto menu
 
@@ -338,6 +347,118 @@ sc config wuauserv start= auto
 sc start wuauserv
 echo Windows Update has been fully enabled.
 pause
+
+pause
+goto menu
+
+
+
+:option11
+
+
+
+set /p file="Enter file or folder path: "
+
+if exist "%file%" (
+    echo Attempting to delete "%file%"...
+    attrib -r -a -s -h "%file%" >nul 2>&1
+    takeown /f "%file%" /r /d y >nul 2>&1
+    icacls "%file%" /grant administrators:F /t >nul 2>&1
+    rd /s /q "%file%" >nul 2>&1 || del /f /q "%file%" >nul 2>&1 || (
+        echo Unable to delete "%file%". Giving ownership to current user and trying again...
+        takeown /f "%file%" /r /d y >nul 2>&1
+        icacls "%file%" /grant administrators:F /t >nul 2>&1
+        rd /s /q "%file%" >nul 2>&1 || del /f /q "%file%" >nul 2>&1 || (
+            echo Unable to delete "%file%". Moving to recycle bin...
+            move "%file%" "%USERPROFILE%\AppData\Local\Microsoft\Windows\Temporary Internet Files"
+        )
+    )
+    if exist "%file%" (
+        echo You don't have sufficient permissions to delete "%file%". Please take ownership of the file or folder and try again.
+    )
+) else (
+    echo File or folder "%file%" does not exist.
+)
+
+pause
+goto menu
+
+
+:option12
+
+
+
+@echo off
+set /p vlc=Download VLC media player? (y/n)
+if /i "%vlc%"=="y" (
+    powershell -Command "Invoke-WebRequest -Uri 'https://get.videolan.org/vlc/3.0.18/win32/vlc-3.0.18-win32.exe' -OutFile 'vlc-download.html'"
+    for /f "delims=" %%a in ('type vlc-download.html ^| findstr /i "http.*vlc-[0-9].*win64.exe"') do set url=%%a
+    powershell -Command "Invoke-WebRequest -Uri '%url%' -OutFile 'vlc.exe'"
+    del vlc-download.html
+  echo IDM downloaded successfully.
+) else (
+    echo VLC media installation skipped.
+)
+
+
+set /p winrar=Download WinRAR? (y/n)
+if /i "%winrar%"=="y" (
+    powershell -Command "Invoke-WebRequest -Uri 'https://www.rarlab.com/download.htm' -OutFile 'winrar-download.html'"
+    for /f "delims=" %%a in ('type winrar-download.html ^| findstr /i "http.*wr64.*.exe"') do set url=%%a
+    powershell -Command "Invoke-WebRequest -Uri '%url%' -OutFile 'winrar.exe'"
+    del winrar-download.html
+  echo IDM downloaded successfully.
+) else (
+    echo WinRAR installation skipped.
+)
+set /p idm=Download IDM? (y/n)
+if /i "%idm%"=="y" (
+    powershell -Command "Invoke-WebRequest -Uri 'https://www.internetdownloadmanager.com/download.html' -OutFile 'idm-download.html'"
+    for /f "delims=" %%a in ('type idm-download.html ^| findstr /i "http.*idman.*.exe"') do set url=%%a
+    powershell -Command "Invoke-WebRequest -Uri '%url%' -OutFile 'idm.exe'"
+    del idm-download.html
+  echo IDM downloaded successfully.
+) else (
+    echo IDM installation skipped.
+)
+
+set /p telegram=Download Telegram? (y/n)
+if /i "%telegram%"=="y" (
+    powershell -Command "Invoke-WebRequest -Uri 'https://desktop.telegram.org/' -OutFile 'telegram-download.html'"
+    for /f "delims=" %%a in ('type telegram-download.html ^| findstr /i "https.*telegram.*setup.*exe"') do set url=%%a
+    powershell -Command "Invoke-WebRequest -Uri '%url%' -OutFile 'telegram.exe'"
+    del telegram-download.html
+  echo IDM downloaded successfully.
+) else (
+    echo Telegram installation skipped.
+)
+
+set /p whatsapp=Download WhatsApp? (y/n)
+if /i "%whatsapp%"=="y" (
+    powershell -Command "Invoke-WebRequest -Uri 'https://www.whatsapp.com/download/' -OutFile 'whatsapp-download.html'"
+    for /f "delims=" %%a in ('type whatsapp-download.html ^| findstr /i "https.*websetup.*exe"') do set url=%%a
+    powershell -Command "Invoke-WebRequest -Uri '%url%' -OutFile 'whatsapp.exe'"
+    del whatsapp-download.html
+  echo IDM downloaded successfully.
+) else (
+    echo WhatsApp installation skipped.
+)
+
+set /p discord=Download Discord? (y/n)
+if /i "%discord%"=="y" (
+    powershell -Command "Invoke-WebRequest -Uri 'https://discord.com/download' -OutFile 'discord-download.html'"
+    for /f "delims=" %%a in ('type discord-download.html ^| findstr /i "https.*DiscordSetup.*exe"') do set url=%%a
+    powershell -Command "Invoke-WebRequest -Uri '%url%' -OutFile 'discord.exe'"
+    del discord-download.html
+  echo IDM downloaded successfully.
+) else (
+    echo Discord installation skipped.
+)
+
+
+
+
+
 
 pause
 goto menu
