@@ -3,13 +3,6 @@ color 4
 set "params=%*"
 cd /d "%~dp0" && ( if exist "%temp%\getadmin.vbs" del "%temp%\getadmin.vbs" ) && fsutil dirty query %systemdrive% 1>nul 2>nul || (  echo Set UAC = CreateObject^("Shell.Application"^) : UAC.ShellExecute "cmd.exe", "/c cd ""%~sdp0"" && %~s0 %params%", "", "runas", 1 >> "%temp%\getadmin.vbs" && "%temp%\getadmin.vbs" && exit /B )
 :pass
-color b
-echo ##################################################
-echo #               Made by Moemen_N7                #
-echo #          https://github.com/Moemen-N7/         #
-echo ##################################################
-echo Thanks For Using My tool  :)
-echo ############################
 
 
 :menu
